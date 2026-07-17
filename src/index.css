@@ -1,111 +1,134 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import "tailwindcss";
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@theme {
+  --color-surface-container-low: #f6f3f3;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-primary-container: #ebf4fa;
+  --color-on-secondary: #ffffff;
+  --color-surface-variant: #e4e2e2;
+  --color-secondary: #a43a3d;
+  --color-inverse-surface: #303031;
+  --color-surface: #fcf9f8;
+  --color-tertiary-fixed: #ffe088;
+  --color-error: #ba1a1a;
+  --color-outline: #74787a;
+  --color-on-surface-variant: #43474a;
+  --color-on-primary-fixed: #141d21;
+  --color-on-background: #1b1b1c;
+  --color-background: #fcf9f8;
+  --color-on-surface: #1b1b1c;
+  --color-surface-container-highest: #e4e2e2;
+  --color-surface-dim: #dcd9d9;
+  --color-surface-container: #f0eded;
+  --color-primary: #576065;
+  --color-tertiary: #735c00;
+  --color-on-tertiary-fixed-variant: #574500;
+  --color-on-secondary-fixed-variant: #842228;
+  --color-on-primary: #ffffff;
+  --color-on-secondary-fixed: #410007;
+  --color-surface-tint: #576065;
+  --color-primary-fixed-dim: #bfc8ce;
+  --color-on-error-container: #93000a;
+  --color-tertiary-fixed-dim: #e7c353;
+  --color-on-tertiary: #ffffff;
+  --color-surface-bright: #fcf9f8;
+  --color-on-primary-container: #677075;
+  --color-on-primary-fixed-variant: #3f484d;
+  --color-inverse-primary: #bfc8ce;
+  --color-secondary-container: #fc7c7c;
+  --color-on-secondary-container: #72131c;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-tertiary-container: #876b00;
+  --color-on-tertiary-fixed: #241a00;
+  --color-secondary-fixed-dim: #ffb3b1;
+  --color-tertiary-container: #fff2d6;
+  --color-outline-variant: #c4c7ca;
+  --color-surface-container-high: #eae7e7;
+  --color-primary-fixed: #dbe4ea;
+  --color-secondary-fixed: #ffdad8;
+  --color-inverse-on-surface: #f3f0f0;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
+  --spacing-unit: 8px;
+  --spacing-gutter: 24px;
+  --spacing-sidebar-width: 280px;
+  --spacing-cell-padding: 12px;
+  --spacing-margin-mobile: 16px;
+  --spacing-margin-desktop: 40px;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+  --font-header-sm: "Plus Jakarta Sans", sans-serif;
+  --font-date-display: "Hanken Grotesk", sans-serif;
+  --font-date-display-mobile: "Hanken Grotesk", sans-serif;
+  --font-body-main: "Plus Jakarta Sans", sans-serif;
+  --font-caption: "Plus Jakarta Sans", sans-serif;
+  --font-label-bold: "Plus Jakarta Sans", sans-serif;
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+  --font-size-header-sm: 14px;
+  --font-size-header-sm--line-height: 1.5;
+  --font-size-header-sm--letter-spacing: 0.05em;
+  --font-size-header-sm--font-weight: 300;
+
+  --font-size-date-display: 48px;
+  --font-size-date-display--line-height: 1.1;
+  --font-size-date-display--letter-spacing: -0.02em;
+  --font-size-date-display--font-weight: 800;
+
+  --font-size-date-display-mobile: 32px;
+  --font-size-date-display-mobile--line-height: 1.1;
+  --font-size-date-display-mobile--font-weight: 800;
+
+  --font-size-body-main: 16px;
+  --font-size-body-main--line-height: 1.6;
+  --font-size-body-main--font-weight: 400;
+
+  --font-size-caption: 12px;
+  --font-size-caption--line-height: 1.4;
+  --font-size-caption--font-weight: 400;
+
+  --font-size-label-bold: 14px;
+  --font-size-label-bold--line-height: 1.2;
+  --font-size-label-bold--font-weight: 600;
 }
 
 body {
-  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #fcf9f8;
+  -webkit-font-smoothing: antialiased;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.natural-shadow {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.active-day-ring {
+  box-shadow: 0 0 0 2px #a43a3d;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.purnama-glow {
+  box-shadow: 0 0 15px rgba(255, 242, 214, 0.8);
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #bfc8ce;
+  border-radius: 10px;
 }
