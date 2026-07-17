@@ -5,12 +5,12 @@ function Sidebar() {
         <div className="w-20 h-20 rounded-full overflow-hidden bg-white/50 border-4 border-white/30 p-1 natural-shadow">
           <img
             className="w-full h-full object-cover rounded-full"
-            alt="Stitch in Balinese attire"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXkQLJ4vxX35jCaN7bANDGTV778pkDQZ_k8lrwjU9Y4FNc_NQdwNj7fohyAxZ2FCiLa4fm56nyI42Z2WTbCDUcmLb7iNeq_u_hYetfgoZjiCI00MDydfsO2uQRraM9_YydcaS-Q8yuz-c99E6k_91kQ-CsBTy4Bjybwb_3Li2tQolt319p3v5NHNVhkv-MOqC18Z0fWoZ0L76fotjTHyrmHLBnV3YqoSLu0vpLXF9e4RZ8xO_J4_SP"
+            alt="Kalabali logo"
+            src="/logo.png"
           />
         </div>
         <div>
-          <h2 className="font-date-display text-[24px] text-primary tracking-tight">Rhythm of Bali</h2>
+          <h2 className="font-date-display text-[24px] text-primary tracking-tight">Kalabali</h2>
           <p className="font-label-bold text-label-bold text-on-primary-container mt-1">Wednesday, Oct 23</p>
           <p className="font-caption text-caption text-primary/70 uppercase tracking-widest mt-1">Wuku Sinta</p>
         </div>
