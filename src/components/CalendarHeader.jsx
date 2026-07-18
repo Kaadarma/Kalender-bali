@@ -1,10 +1,20 @@
-function CalendarHeader() {
+function CalendarHeader({ onToggleSidebar, sidebarOpen }) {
   return (
     <>
       <div className="hidden md:flex justify-between items-center w-full px-margin-desktop py-gutter">
-        <div className="flex flex-col">
-          <h1 className="font-date-display text-date-display text-primary">October 2024</h1>
-          <p className="font-body-main text-on-surface-variant/70">A month for grounded growth and spiritual clarity.</p>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={onToggleSidebar}
+            className="p-2 rounded-full hover:bg-surface-container transition-colors"
+          >
+            <span className="material-symbols-outlined text-primary">
+              {sidebarOpen ? "menu_open" : "menu"}
+            </span>
+          </button>
+          <div className="flex flex-col">
+            <h1 className="font-date-display text-date-display text-primary">October 2024</h1>
+            <p className="font-body-main text-on-surface-variant/70">A month for grounded growth and spiritual clarity.</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <button className="p-3 rounded-full hover:bg-surface-container transition-colors">
@@ -24,8 +34,8 @@ function CalendarHeader() {
           <div className="w-14 h-14 rounded-full overflow-hidden bg-primary-container p-1">
             <img
               className="w-full h-full object-cover rounded-full"
-              alt="Stitch portrait"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDylNhaKt7wmfuO6H8pres7-sJQYa96kTCrS6Plaooi6Smn9Uj2ATli4yC2t-jAyA7UNPEznlzVKPpWWBaIyPoFqAd5RTSkuAYBK5kHV7IRWekJSD_DPWkM3Ty6_EKhu2ORVZqOLyMjMr_nevtxIrYtqYErW6w52bvisuXhHOrrakFdAJKa-SdeqysnDazfA7vxji1hbilzzTlkifTgYs-meEaf9hW9QvWWZiKEy8TnYmAFcpDDjAPZ"
+              alt="Kalabali logo"
+              src="/logo.png"
             />
           </div>
           <div>
