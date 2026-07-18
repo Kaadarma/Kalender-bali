@@ -67,29 +67,47 @@ function CalendarHeader({ onToggleSidebar, sidebarOpen, month, year, onPrevMonth
       </div>
 
       <div className="md:hidden px-margin-mobile pt-unit pb-gutter">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-full overflow-hidden bg-primary-container p-1">
-            <img
-              className="w-full h-full object-cover rounded-full"
-              alt="Kalabali logo"
-              src="/logo.png"
-            />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full overflow-hidden bg-primary-container p-1">
+              <img
+                className="w-full h-full object-cover rounded-full"
+                alt="Kalabali logo"
+                src="/logo.png"
+              />
+            </div>
+            <div>
+              <h2 className="font-date-display-mobile text-date-display-mobile text-primary">
+                {monthShort[month]}{' '}
+                <select
+                  value={year}
+                  onChange={e => onYearChange(Number(e.target.value))}
+                  className="bg-transparent font-date-display-mobile text-date-display-mobile text-primary outline-none cursor-pointer"
+                >
+                  {yearRange.map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </h2>
+              <p className="font-caption text-on-surface-variant">{wuku}</p>
+            </div>
           </div>
-          <div>
-            <h2 className="font-date-display-mobile text-date-display-mobile text-primary">
-              {monthShort[month]}{' '}
-              <select
-                value={year}
-                onChange={e => onYearChange(Number(e.target.value))}
-                className="bg-transparent font-date-display-mobile text-date-display-mobile text-primary outline-none cursor-pointer"
-              >
-                {yearRange.map(y => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
-            </h2>
-            <p className="font-caption text-on-surface-variant">{wuku}</p>
-          </div>
+          <button
+            onClick={onToggleDarkMode}
+            className={`relative w-11 h-6 rounded-full transition-colors duration-300 flex-shrink-0 ${
+              darkMode ? 'bg-primary' : 'bg-surface-variant'
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 flex items-center justify-center ${
+                darkMode ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[12px] text-primary">
+                {darkMode ? 'dark_mode' : 'light_mode'}
+              </span>
+            </span>
+          </button>
         </div>
       </div>
     </>
