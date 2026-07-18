@@ -1,13 +1,9 @@
-const BASE = "/api"
+import { getTodayData, generateMonthGrid } from "../utils/calendar"
 
-export async function fetchToday() {
-  const res = await fetch(`${BASE}/today`)
-  if (!res.ok) throw new Error("Failed to fetch today")
-  return res.json()
+export function fetchToday() {
+  return Promise.resolve(getTodayData())
 }
 
-export async function fetchCalendar(month, year) {
-  const res = await fetch(`${BASE}/calendar?month=${month}&year=${year}`)
-  if (!res.ok) throw new Error("Failed to fetch calendar")
-  return res.json()
+export function fetchCalendar(month, year) {
+  return Promise.resolve(generateMonthGrid(month - 1, year))
 }
