@@ -13,7 +13,7 @@ function dateToDays(d) {
   return Math.floor(d.getTime() / MS_PER_DAY)
 }
 
-const ANCHOR_WUKU = { date: new Date(2024, 0, 1), wukuIndex: 0 }
+const ANCHOR_WUKU = { date: new Date(2023, 11, 18), wukuIndex: 0 }
 const ANCHOR_GALUNGAN = { date: new Date(2024, 1, 28) }
 
 function getWuku(date) {
@@ -48,25 +48,83 @@ function getGalunganDates(year) {
   return results
 }
 
+function toJulianDay(year, month, day, hour = 0) {
+  let y = year
+  let m = month
+  if (m <= 2) { y--; m += 12 }
+  const A = Math.floor(y / 100)
+  const B = 2 - A + Math.floor(A / 4)
+  return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + day + B - 1524.5 + hour / 24
+}
+
+function sunLongitude(jd) {
+  const T = (jd - 2451545.0) / 36525
+  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T * T
+  const M = (357.52911 + 35999.05029 * T - 0.0001537 * T * T) * Math.PI / 180
+  const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * Math.sin(M)
+          + (0.019993 - 0.000101 * T) * Math.sin(2 * M)
+          + 0.000289 * Math.sin(3 * M)
+  return ((L0 + C) % 360 + 360) % 360
+}
+
+function moonLongitude(jd) {
+  const T = (jd - 2451545.0) / 36525
+  const Lp = 218.3165 + 481267.8813 * T
+  const Mp = (134.9629 + 477198.8676 * T) * Math.PI / 180
+  const D = (297.8502 + 445267.1114 * T) * Math.PI / 180
+  const M = (357.52911 + 35999.05029 * T) * Math.PI / 180
+  const F = (93.2720 + 483202.0175 * T) * Math.PI / 180
+
+  const corr = 6.289 * Math.sin(Mp)
+             + 1.274 * Math.sin(2 * D - Mp)
+             + 0.658 * Math.sin(2 * D)
+             + 0.214 * Math.sin(2 * Mp)
+             - 0.186 * Math.sin(M)
+             - 0.114 * Math.sin(2 * F)
+
+  return ((Lp + corr) % 360 + 360) % 360
+}
+
+function getMoonSunAngle(jd) {
+  const sunLon = sunLongitude(jd)
+  const moonLon = moonLongitude(jd)
+  return ((moonLon - sunLon) % 360 + 360) % 360
+}
+
+function getSunriseJD(date) {
+  const prevDate = new Date(date)
+  prevDate.setDate(prevDate.getDate() - 1)
+  return toJulianDay(prevDate.getFullYear(), prevDate.getMonth() + 1, prevDate.getDate(), 22)
+}
+
 function getLunarPhases(year) {
   const results = []
-  const KNOWN_PURNAMA = new Date(2024, 0, 25)
-  const LUNAR_CYCLE = 29.530587
 
-  for (let month = 0; month < 12; month++) {
-    const target = new Date(year, month, 15)
-    const diffDays = (target - KNOWN_PURNAMA) / MS_PER_DAY
-    const cycles = Math.round(diffDays / LUNAR_CYCLE)
-    const purnama = new Date(KNOWN_PURNAMA.getTime() + Math.round(cycles * LUNAR_CYCLE * MS_PER_DAY))
-    const tilem = new Date(purnama.getTime() + Math.round(LUNAR_CYCLE / 2 * MS_PER_DAY))
+  const startDate = new Date(year, 0, 1)
+  const endDate = new Date(year + 1, 0, 1)
 
-    if (purnama.getMonth() === month) {
-      results.push({ date: purnama, name: "Purnama", color: "tertiary-fixed-dim", purnama: true })
+  let prevDate = new Date(startDate)
+  prevDate.setDate(prevDate.getDate() - 1)
+  let prevAngle = getMoonSunAngle(getSunriseJD(prevDate))
+  let prevTithi = Math.floor(prevAngle / 12)
+
+  const cur = new Date(startDate)
+  while (cur < endDate) {
+    const angle = getMoonSunAngle(getSunriseJD(cur))
+    const tithi = Math.floor(angle / 12)
+
+    if (prevTithi < 14 && tithi >= 14) {
+      results.push({ date: new Date(cur), name: "Purnama", color: "tertiary-fixed-dim", purnama: true })
     }
-    if (tilem.getMonth() === month) {
-      results.push({ date: tilem, name: "Tilem", color: "primary-fixed-dim" })
+    if (prevTithi < 29 && tithi >= 29) {
+      results.push({ date: new Date(cur), name: "Tilem", color: "primary-fixed-dim", tilem: true })
     }
+
+    prevTithi = tithi
+    prevAngle = angle
+    cur.setDate(cur.getDate() + 1)
   }
+
   return results
 }
 

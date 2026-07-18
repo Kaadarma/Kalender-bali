@@ -109,6 +109,17 @@ function CalendarHeader({ onToggleSidebar, sidebarOpen, month, year, onPrevMonth
             </span>
           </button>
         </div>
+        <div className="flex items-center justify-between">
+          <button onClick={onPrevMonth} className="p-2 rounded-full hover:bg-surface-container transition-colors">
+            <span className="material-symbols-outlined text-primary">chevron_left</span>
+          </button>
+          <button onClick={onToday} className="px-5 py-1.5 bg-surface border border-outline-variant rounded-full font-label-bold text-sm text-primary hover:bg-surface-container transition-colors">
+            Hari Ini
+          </button>
+          <button onClick={onNextMonth} className="p-2 rounded-full hover:bg-surface-container transition-colors">
+            <span className="material-symbols-outlined text-primary">chevron_right</span>
+          </button>
+        </div>
       </div>
     </>
   )
