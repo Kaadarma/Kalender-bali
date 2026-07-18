@@ -8,7 +8,7 @@ import BentoCards from './components/BentoCards'
 import MobileRitualList from './components/MobileRitualList'
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [today, setToday] = useState(null)
   const [calendar, setCalendar] = useState(null)
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())
@@ -62,7 +62,7 @@ function App() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen text-on-background overflow-x-hidden">
       <MobileTopBar onToggleMenu={() => setSidebarOpen(v => !v)} />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} today={today} darkMode={darkMode} onToggleDarkMode={() => setDarkMode(v => !v)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} today={today} />
       <main
         className={`flex-grow bg-surface-container-lowest transition-all duration-500 ${
           sidebarOpen ? 'md:ml-sidebar-width' : 'md:ml-0'
