@@ -15,6 +15,7 @@ function dateToDays(d) {
 
 const ANCHOR_WUKU = { date: new Date(2023, 11, 18), wukuIndex: 0 }
 const ANCHOR_GALUNGAN = { date: new Date(2024, 1, 28) }
+const ANCHOR_KAJENG_KLIWON = { date: new Date(2026, 6, 12) }
 
 function getWuku(date) {
   const diff = dateToDays(date) - dateToDays(ANCHOR_WUKU.date)
@@ -45,6 +46,58 @@ function getGalunganDates(year) {
     })
     g = new Date(g.getTime() + 210 * MS_PER_DAY)
   }
+  return results
+}
+
+function getKajengKliwonDates(year) {
+  const results = []
+  const start = new Date(year, 0, 1)
+  const end = new Date(year, 11, 31)
+  const k = new Date(ANCHOR_KAJENG_KLIWON.date)
+
+  while (k >= start) {
+    k.setDate(k.getDate() - 15)
+  }
+  k.setDate(k.getDate() + 15)
+
+  while (k <= end) {
+    results.push({
+      date: new Date(k),
+      name: "Kajeng Kliwon",
+      color: "outline",
+      type: "kajeng"
+    })
+    k.setDate(k.getDate() + 15)
+  }
+
+  return results
+}
+
+function getPancawara(date) {
+  const ANCHOR = { date: new Date(2026, 6, 8) }
+  const diff = dateToDays(date) - dateToDays(ANCHOR.date)
+  return ((diff % 5) + 5) % 5
+}
+
+function getBhataraSriDates(year) {
+  const results = []
+  const start = new Date(year, 0, 1)
+  const end = new Date(year, 11, 31)
+  const cur = new Date(start)
+
+  while (cur <= end) {
+    const wuku = getWuku(cur)
+    if (cur.getDay() === 5 && getPancawara(cur) === 0 && wuku.index === 27) {
+      results.push({
+        date: new Date(cur),
+        name: "Bhatara Sri",
+        color: "tertiary",
+        type: "bhataraSri"
+      })
+    }
+    cur.setDate(cur.getDate() + 1)
+  }
+
   return results
 }
 
@@ -129,7 +182,12 @@ function getLunarPhases(year) {
 }
 
 function getSpecialDays(year) {
-  return [...getGalunganDates(year), ...getLunarPhases(year)]
+  return [
+    ...getGalunganDates(year),
+    ...getLunarPhases(year),
+    ...getKajengKliwonDates(year),
+    ...getBhataraSriDates(year)
+  ]
 }
 
-export { WUKU_LIST, getWuku, getGalunganDates, getLunarPhases, getSpecialDays }
+export { WUKU_LIST, getWuku, getGalunganDates, getKajengKliwonDates, getLunarPhases, getBhataraSriDates, getSpecialDays }

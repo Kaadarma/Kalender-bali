@@ -2,14 +2,16 @@ const colorMap = {
   secondary: "#a43a3d",
   tertiary: "#735c00",
   "tertiary-fixed-dim": "#e7c353",
-  "primary-fixed-dim": "#666"
+  "primary-fixed-dim": "#666",
+  outline: "#888"
 }
 
 const iconMap = {
   Purnama: "brightness_4",
   Tilem: "dark_mode",
   Galungan: "temple_hindu",
-  Kuningan: "celebration"
+  Kuningan: "celebration",
+  "Kajeng Kliwon": "night"
 }
 
 export default function BentoCards({ today, monthRituals }) {
@@ -31,8 +33,8 @@ export default function BentoCards({ today, monthRituals }) {
           </span>
           <div>
             <p className="font-display text-[32px] font-bold leading-none" style={{ color: colorMap[r.color] || "#666" }}>
-              {daysAway(r.date)}
-              <span className="text-base font-label-bold text-on-surface-variant ml-1">hari lagi</span>
+              {daysAway(r.date) > 0 ? daysAway(r.date) : '-'}
+              <span className="text-base font-label-bold text-on-surface-variant ml-1">{daysAway(r.date) > 0 ? 'hari lagi' : 'Sudah'}</span>
             </p>
             <p className="font-caption text-caption text-on-surface-variant mt-1">{r.name}</p>
           </div>

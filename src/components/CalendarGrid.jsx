@@ -4,7 +4,7 @@ import { getWuku } from "../utils/pawukon"
 const dayNames = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"]
 const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
 
-function CalendarCell({ day, offset, highlight, color, purnama, tilem, today, isSunday, onClick }) {
+function CalendarCell({ day, offset, highlight, color, purnama, tilem, lines, today, isSunday, onClick }) {
   const sundayClass = isSunday ? "text-red-500" : "text-primary"
   const sundayClassDim = isSunday ? "text-red-300" : ""
   const base = "p-3 border-r border-b border-surface-variant/30 relative flex flex-col items-center"
@@ -29,7 +29,9 @@ function CalendarCell({ day, offset, highlight, color, purnama, tilem, today, is
     )
   }
 
-  if (highlight) {
+  const isKajengOnly = lines?.length === 1 && lines[0] === "kajeng" && !purnama && !tilem
+
+  if (highlight && !isKajengOnly) {
     const bgClass = color === "secondary" ? "bg-secondary-fixed/50" : "bg-tertiary-container/40"
     const textClass = color === "secondary" ? "text-secondary" : "text-tertiary"
     content = (
@@ -45,6 +47,16 @@ function CalendarCell({ day, offset, highlight, color, purnama, tilem, today, is
       {content}
       {purnama && <div className="absolute top-1/4 right-1/4 w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-red-500" />}
       {tilem && <div className="absolute top-1/4 right-1/4 w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-gray-900 dark:bg-gray-300" />}
+      {lines?.map((line, i) => {
+        const isBhataraSri = line === "bhataraSri"
+        return (
+          <div
+            key={i}
+            className={`absolute left-1/2 -translate-x-1/2 w-6 h-0.5 md:w-7 md:h-1 rounded-sm ${isBhataraSri ? "bg-black dark:bg-white" : "bg-gray-700 dark:bg-gray-200"}`}
+            style={{ bottom: `calc(0.75rem + ${i * 6}px)` }}
+          />
+        )
+      })}
     </button>
   )
 }
@@ -111,7 +123,7 @@ export default function CalendarGrid({ calendar }) {
         </div>
         <div className="calendar-grid min-h-[400px]">
           {days.map((d, i) => (
-            <CalendarCell key={i} day={d.day} offset={d.offset} highlight={d.highlight} color={d.color} purnama={d.purnama} tilem={d.tilem} today={d.today} isSunday={i % 7 === 0} onClick={() => handleCellClick(d, i)} />
+            <CalendarCell key={i} day={d.day} offset={d.offset} highlight={d.highlight} color={d.color} purnama={d.purnama} tilem={d.tilem} lines={d.lines} today={d.today} isSunday={i % 7 === 0} onClick={() => handleCellClick(d, i)} />
           ))}
         </div>
       </div>
