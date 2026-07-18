@@ -18,7 +18,7 @@ export function generateMonthGrid(month, year) {
 
   for (let day = 1; day <= totalDays; day++) {
     const date = new Date(year, month, day)
-    const special = specialDays.find(s =>
+    const specials = specialDays.filter(s =>
       s.date.getFullYear() === year &&
       s.date.getMonth() === month &&
       s.date.getDate() === day
@@ -28,13 +28,21 @@ export function generateMonthGrid(month, year) {
       date.getMonth() === new Date().getMonth() &&
       date.getDate() === new Date().getDate()
 
-    if (special) {
+    if (specials.length > 0) {
+      const primary = specials[0]
+      const lines = []
+      specials.forEach(s => {
+        if (s.type === "kajeng") lines.push("kajeng")
+        if (s.type === "bhataraSri") lines.push("bhataraSri")
+      })
+
       days.push({
         day,
-        highlight: special.name,
-        color: special.color,
-        ...(special.purnama ? { purnama: true } : {}),
-        ...(special.tilem ? { tilem: true } : {})
+        highlight: primary.name,
+        color: primary.color,
+        ...(specials.some(s => s.purnama) ? { purnama: true } : {}),
+        ...(specials.some(s => s.tilem) ? { tilem: true } : {}),
+        ...(lines.length ? { lines } : {})
       })
     } else if (isToday) {
       days.push({ day, today: true })
@@ -74,6 +82,13 @@ export function generateMonthGrid(month, year) {
   return { month, year, days, weeks }
 }
 
+function localDateStr(d) {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, "0")
+  const day = String(d.getDate()).padStart(2, "0")
+  return `${y}-${m}-${day}`
+}
+
 const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
 const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
 const monthShort = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
@@ -96,12 +111,12 @@ export function getTodayData() {
     .slice(0, 5)
     .map(s => ({
       name: s.name,
-      date: s.date.toISOString().split("T")[0],
+      date: localDateStr(s.date),
       color: s.color
     }))
 
   return {
-    date: now.toISOString().split("T")[0],
+    date: localDateStr(now),
     dayName: dayNames[now.getDay()],
     dayShort: dayNames[now.getDay()].slice(0, 3),
     month: months[now.getMonth()],
@@ -119,18 +134,21 @@ export function getTodayData() {
 
 export function getMonthRituals(month, year) {
   const now = new Date()
-  const specialDays = getSpecialDays(year)
-  const monthStart = new Date(year, month, 1)
-  const monthEnd = new Date(year, month + 1, 0, 23, 59, 59)
-  const isCurrentMonth = year === now.getFullYear() && month === now.getMonth()
-  const start = isCurrentMonth ? now : monthStart
+  const viewStart = new Date(year, month, 1)
+  const thisYear = getSpecialDays(year)
+  const nextYear = getSpecialDays(year + 1)
+  const allDays = [...thisYear, ...nextYear]
 
-  return specialDays
-    .filter(s => s.date >= start && s.date <= monthEnd)
+  return allDays
+    .filter(s => {
+      const cutoff = viewStart > now ? viewStart : now
+      return s.date >= cutoff
+    })
+    .sort((a, b) => a.date - b.date)
     .slice(0, 5)
     .map(s => ({
       name: s.name,
-      date: s.date.toISOString().split("T")[0],
+      date: localDateStr(s.date),
       color: s.color
     }))
 }

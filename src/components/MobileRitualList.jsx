@@ -1,7 +1,8 @@
 const colorMap = {
   secondary: "#a43a3d",
   tertiary: "#735c00",
-  "tertiary-fixed-dim": "#e7c353"
+  "tertiary-fixed-dim": "#e7c353",
+  outline: "#888"
 }
 
 export default function MobileRitualList({ today, monthRituals }) {
@@ -22,7 +23,7 @@ export default function MobileRitualList({ today, monthRituals }) {
           <div className="w-2 h-10 rounded-full" style={{ backgroundColor: colorMap[r.color] || "#666" }} />
           <div className="flex-1">
             <p className="font-label-bold text-on-surface">{r.name}</p>
-            <p className="font-caption text-on-surface-variant">{daysAway(r.date)} hari lagi &middot; {r.date}</p>
+            <p className="font-caption text-on-surface-variant">{daysAway(r.date) > 0 ? daysAway(r.date) + ' hari lagi' : 'Sudah lewat'} &middot; {r.date}</p>
           </div>
         </div>
       ))}

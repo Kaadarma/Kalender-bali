@@ -1,7 +1,8 @@
 const colorMap = {
   secondary: "#a43a3d",
   tertiary: "#735c00",
-  "tertiary-fixed-dim": "#e7c353"
+  "tertiary-fixed-dim": "#e7c353",
+  outline: "#888"
 }
 
 function Sidebar({ open, onClose, today, monthRituals }) {
@@ -77,7 +78,7 @@ function Sidebar({ open, onClose, today, monthRituals }) {
                   <div className="w-2 h-8 rounded-full" style={{ backgroundColor: colorMap[r.color] || "#666" }} />
                   <div>
                     <p className="font-label-bold text-on-surface">{r.name}</p>
-                    <p className="font-caption text-on-surface-variant">{daysAway(r.date)} hari lagi &middot; {formatDate(r.date)}</p>
+                    <p className="font-caption text-on-surface-variant">{daysAway(r.date) > 0 ? daysAway(r.date) + ' hari lagi' : 'Sudah lewat'} &middot; {formatDate(r.date)}</p>
                   </div>
                 </div>
               ))}
