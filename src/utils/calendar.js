@@ -33,7 +33,8 @@ export function generateMonthGrid(month, year) {
         day,
         highlight: special.name,
         color: special.color,
-        ...(special.purnama ? { purnama: true } : {})
+        ...(special.purnama ? { purnama: true } : {}),
+        ...(special.tilem ? { tilem: true } : {})
       })
     } else if (isToday) {
       days.push({ day, today: true })
@@ -47,7 +48,30 @@ export function generateMonthGrid(month, year) {
     days.push({ day, offset: true })
   }
 
-  return { month, year, days }
+  const weeks = []
+  for (let row = 0; row < 6; row++) {
+    const i = row * 7
+    let d, m, y
+    if (i < startOffset) {
+      d = prevMonthLast - (startOffset - i - 1)
+      m = month - 1
+      y = year
+      if (m < 0) { m = 11; y-- }
+    } else if (i < startOffset + totalDays) {
+      d = i - startOffset + 1
+      m = month
+      y = year
+    } else {
+      d = i - (startOffset + totalDays) + 1
+      m = month + 1
+      y = year
+      if (m > 11) { m = 0; y++ }
+    }
+    const wuku = getWuku(new Date(y, m, d))
+    weeks.push({ wuku: wuku.name, index: wuku.index })
+  }
+
+  return { month, year, days, weeks }
 }
 
 const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
@@ -65,9 +89,11 @@ export function getTodayData() {
     s.date.getDate() === now.getDate()
   )
 
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+  const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
   const upcoming = specialDays
-    .filter(s => s.date >= now)
-    .slice(0, 3)
+    .filter(s => s.date >= now && s.date <= monthEnd)
+    .slice(0, 5)
     .map(s => ({
       name: s.name,
       date: s.date.toISOString().split("T")[0],
@@ -89,4 +115,22 @@ export function getTodayData() {
     specialToday: todaySpecial ? { name: todaySpecial.name, color: todaySpecial.color } : null,
     upcomingRituals: upcoming
   }
+}
+
+export function getMonthRituals(month, year) {
+  const now = new Date()
+  const specialDays = getSpecialDays(year)
+  const monthStart = new Date(year, month, 1)
+  const monthEnd = new Date(year, month + 1, 0, 23, 59, 59)
+  const isCurrentMonth = year === now.getFullYear() && month === now.getMonth()
+  const start = isCurrentMonth ? now : monthStart
+
+  return specialDays
+    .filter(s => s.date >= start && s.date <= monthEnd)
+    .slice(0, 5)
+    .map(s => ({
+      name: s.name,
+      date: s.date.toISOString().split("T")[0],
+      color: s.color
+    }))
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchToday, fetchCalendar } from './api/calendar'
+import { fetchToday, fetchMonthRituals, fetchCalendar } from './api/calendar'
 import Sidebar from './components/Sidebar'
 import MobileTopBar from './components/MobileTopBar'
 import CalendarHeader from './components/CalendarHeader'
@@ -8,9 +8,10 @@ import BentoCards from './components/BentoCards'
 import MobileRitualList from './components/MobileRitualList'
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768)
   const [today, setToday] = useState(null)
   const [calendar, setCalendar] = useState(null)
+  const [monthRituals, setMonthRituals] = useState([])
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
   const [darkMode, setDarkMode] = useState(() => {
@@ -41,6 +42,10 @@ function App() {
     fetchCalendar(currentMonth + 1, currentYear).then(setCalendar).catch(console.error)
   }, [currentMonth, currentYear])
 
+  useEffect(() => {
+    fetchMonthRituals(currentMonth, currentYear).then(setMonthRituals).catch(console.error)
+  }, [currentMonth, currentYear])
+
   const goPrevMonth = () => {
     setCurrentMonth(m => m === 0 ? 11 : m - 1)
     if (currentMonth === 0) setCurrentYear(y => y - 1)
@@ -62,9 +67,9 @@ function App() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen text-on-background overflow-x-hidden">
       <MobileTopBar onToggleMenu={() => setSidebarOpen(v => !v)} />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} today={today} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} today={today} monthRituals={monthRituals} />
       <main
-        className={`flex-grow bg-surface-container-lowest transition-all duration-500 ${
+        className={`flex-grow bg-surface-container-lowest transition-all duration-500 pt-14 md:pt-0 ${
           sidebarOpen ? 'md:ml-sidebar-width' : 'md:ml-0'
         }`}
       >
@@ -81,8 +86,8 @@ function App() {
           onToggleDarkMode={() => setDarkMode(v => !v)}
         />
         <CalendarGrid calendar={calendar} />
-        <MobileRitualList today={today} />
-        <BentoCards today={today} />
+        <MobileRitualList today={today} monthRituals={monthRituals} />
+        <BentoCards today={today} monthRituals={monthRituals} />
       </main>
     </div>
   )

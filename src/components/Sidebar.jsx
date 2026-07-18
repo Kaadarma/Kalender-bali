@@ -4,34 +4,34 @@ const colorMap = {
   "tertiary-fixed-dim": "#e7c353"
 }
 
-function Sidebar({ open, onClose, today }) {
+function Sidebar({ open, onClose, today, monthRituals }) {
   const dayName = today?.dayName ?? "Rabu"
   const monthShort = today?.monthShort ?? "Okt"
   const day = today?.day ?? "23"
   const wuku = today?.wuku ?? "Sinta"
-  const rituals = today?.upcomingRituals ?? []
+  const rituals = monthRituals ?? today?.upcomingRituals ?? []
 
   function daysAway(dateStr) {
     const diff = new Date(dateStr) - new Date()
     return Math.ceil(diff / 86400000)
   }
 
-  const ritualData = [
-    { name: "Galungan", color: "secondary", label: rituals[0] ? `${daysAway(rituals[0].date)} Hari Lagi` : "" },
-    { name: "Kuningan", color: "tertiary", label: rituals[1] ? `${daysAway(rituals[1].date)} Hari Lagi` : "" },
-    { name: "Purnama", color: "tertiary-fixed-dim", label: rituals[2] ? `${daysAway(rituals[2].date)} Hari Lagi` : "" }
-  ]
+  function formatDate(dateStr) {
+    const d = new Date(dateStr)
+    const names = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
+    return `${d.getDate()} ${names[d.getMonth()]} ${d.getFullYear()}`
+  }
 
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/20 z-30 transition-opacity duration-300 md:hidden ${
+        className={`fixed inset-0 bg-black/20 z-50 transition-opacity duration-300 md:hidden ${
           open ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
       />
       <aside
-        className={`fixed top-0 left-0 h-full w-sidebar-width bg-primary-container flex flex-col z-40 transition-transform duration-300 overflow-y-auto sidebar-scroll ${
+        className={`fixed top-0 left-0 h-full w-sidebar-width bg-primary-container flex flex-col z-50 transition-transform duration-300 overflow-y-auto sidebar-scroll ${
           open ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -72,15 +72,15 @@ function Sidebar({ open, onClose, today }) {
           <div>
             <h3 className="px-2 font-header-sm text-header-sm text-primary uppercase tracking-widest mb-4">Upacara Mendatang</h3>
             <div className="space-y-3">
-              {ritualData.map((r, i) => r.label ? (
+              {rituals.slice(0, 3).map((r, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl">
-                  <div className="w-2 h-8 rounded-full" style={{ backgroundColor: colorMap[r.color] }} />
+                  <div className="w-2 h-8 rounded-full" style={{ backgroundColor: colorMap[r.color] || "#666" }} />
                   <div>
                     <p className="font-label-bold text-on-surface">{r.name}</p>
-                    <p className="font-caption text-on-surface-variant">{r.label}</p>
+                    <p className="font-caption text-on-surface-variant">{daysAway(r.date)} hari lagi &middot; {formatDate(r.date)}</p>
                   </div>
                 </div>
-              ) : null)}
+              ))}
             </div>
           </div>
           <div className="mt-auto pb-4 pt-8">

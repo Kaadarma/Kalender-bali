@@ -114,6 +114,8 @@
 .dark .text-on-primary { color: #1b1b1c; }
 .dark .text-on-tertiary-container { color: #ffe088; }
 .dark .text-on-surface-variant\/70 { color: rgba(196, 199, 202, 0.7); }
+.dark .text-on-surface-variant\/40 { color: rgba(224, 226, 230, 0.55); }
+.dark .text-on-surface-variant\/60 { color: rgba(196, 199, 202, 0.6); }
 .dark .text-red-500 { color: #ff6b6b; }
 .dark .text-red-300 { color: #ff8a8a; }
 .dark .text-white { color: #e8eaed; }
@@ -130,6 +132,8 @@
 .dark .bg-secondary-fixed\/50 { background-color: rgba(164, 58, 61, 0.35); }
 .dark .bg-tertiary-container\/40 { background-color: rgba(115, 92, 0, 0.35); }
 .dark .bg-tertiary-container { background-color: #3a2e00; }
+.dark .bg-surface-bright\/50 { background-color: rgba(255, 255, 255, 0.08); }
+.dark .hover\:bg-surface-bright\/50:hover { background-color: rgba(255, 255, 255, 0.12); }
 
 .dark .natural-shadow { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
 .dark .hover\:bg-surface-container:hover { background-color: #282828; }
@@ -155,6 +159,8 @@ body {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 }
+
+
 
 .active-day-ring {
   box-shadow: 0 0 0 2px #a43a3d;
