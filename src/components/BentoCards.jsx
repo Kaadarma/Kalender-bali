@@ -1,37 +1,39 @@
+const colorMap = {
+  secondary: "#a43a3d",
+  tertiary: "#735c00",
+  "tertiary-fixed-dim": "#e7c353"
+}
+
 export default function BentoCards({ today }) {
-  const reflection = today?.reflection ?? ""
-  const wuku = today?.wuku ?? ""
+  const rituals = today?.upcomingRituals ?? []
+
+  if (rituals.length === 0) return null
+
+  function daysAway(dateStr) {
+    const diff = new Date(dateStr) - new Date()
+    return Math.ceil(diff / 86400000)
+  }
+
+  const colors = ["secondary", "tertiary", "tertiary-fixed-dim"]
+  const icons = ["temple_hindu", "celebration", "brightness_4"]
+  const labels = ["Galungan", "Kuningan", "Purnama"]
 
   return (
-    <section className="px-margin-mobile md:px-margin-desktop py-gutter grid grid-cols-1 md:grid-cols-3 gap-gutter">
-      <div className="md:col-span-2 bg-surface-container-low p-8 rounded-[32px] natural-shadow flex flex-col justify-between overflow-hidden relative group">
-        <div className="relative z-10">
-          <h4 className="font-date-display text-[24px] text-primary mb-2">Today's Reflection</h4>
-          <p className="font-body-main text-on-surface-variant max-w-md">{reflection}</p>
+    <div className="hidden md:grid grid-cols-3 gap-4 px-margin-desktop pb-margin-desktop">
+      {rituals.slice(0, 3).map((r, i) => (
+        <div key={i} className="bg-white rounded-3xl p-5 natural-shadow flex flex-col justify-between min-h-[130px]">
+          <span className="material-symbols-outlined text-[24px]" style={{ color: colorMap[colors[i]] }}>
+            {icons[i]}
+          </span>
+          <div>
+            <p className="font-display text-[32px] font-bold leading-none" style={{ color: colorMap[colors[i]] }}>
+              {daysAway(r.date)}
+              <span className="text-base font-label-bold text-on-surface-variant ml-1">hari lagi</span>
+            </p>
+            <p className="font-caption text-caption text-on-surface-variant mt-1">{labels[i]}</p>
+          </div>
         </div>
-        <div className="mt-8 flex gap-4 relative z-10">
-          <button className="px-6 py-3 bg-primary text-white rounded-full font-label-bold hover:scale-105 transition-transform">
-            Read Script
-          </button>
-          <button className="px-6 py-3 bg-white border border-outline-variant rounded-full font-label-bold text-primary hover:bg-surface-variant transition-colors">
-            Listen Audio
-          </button>
-        </div>
-        <span className="material-symbols-outlined absolute -bottom-8 -right-8 text-[200px] text-primary/5 select-none pointer-events-none group-hover:rotate-12 transition-transform duration-700">
-          spa
-        </span>
-      </div>
-
-      <div className="bg-primary text-white p-8 rounded-[32px] natural-shadow flex flex-col items-center justify-center text-center">
-        <span className="material-symbols-outlined text-[48px] mb-4" style={{ fontVariationSettings: "'FILL' 1" }}>
-          bedtime
-        </span>
-        <h4 className="font-label-bold text-[18px]">Ritual Rest</h4>
-        <p className="font-caption mt-2 opacity-80">Next period of silence begins at dusk tomorrow.</p>
-        <div className="mt-6 w-full h-1 bg-white/20 rounded-full overflow-hidden">
-          <div className="w-[65%] h-full bg-tertiary-fixed-dim" />
-        </div>
-      </div>
-    </section>
+      ))}
+    </div>
   )
 }

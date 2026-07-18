@@ -5,16 +5,21 @@ const colorMap = {
 }
 
 function Sidebar({ open, onClose, today }) {
-  const dayName = today?.dayName ?? "Wednesday"
-  const monthShort = today?.monthShort ?? "Oct"
+  const dayName = today?.dayName ?? "Rabu"
+  const monthShort = today?.monthShort ?? "Okt"
   const day = today?.day ?? "23"
   const wuku = today?.wuku ?? "Sinta"
   const rituals = today?.upcomingRituals ?? []
 
+  function daysAway(dateStr) {
+    const diff = new Date(dateStr) - new Date()
+    return Math.ceil(diff / 86400000)
+  }
+
   const ritualData = [
-    { name: "Galungan", color: "secondary", label: rituals[0]?.daysAway ? `In ${rituals[0].daysAway} Days` : "" },
-    { name: "Kuningan", color: "tertiary", label: rituals[1]?.daysAway ? `In ${rituals[1].daysAway} Days` : "" },
-    { name: "Purnama", color: "tertiary-fixed-dim", label: rituals[2]?.daysAway ? `In ${rituals[2].daysAway} Days` : "" }
+    { name: "Galungan", color: "secondary", label: rituals[0] ? `${daysAway(rituals[0].date)} Hari Lagi` : "" },
+    { name: "Kuningan", color: "tertiary", label: rituals[1] ? `${daysAway(rituals[1].date)} Hari Lagi` : "" },
+    { name: "Purnama", color: "tertiary-fixed-dim", label: rituals[2] ? `${daysAway(rituals[2].date)} Hari Lagi` : "" }
   ]
 
   return (
