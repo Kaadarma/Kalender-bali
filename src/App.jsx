@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { fetchToday, fetchCalendar } from './api/calendar'
 import Sidebar from './components/Sidebar'
 import MobileTopBar from './components/MobileTopBar'
 import CalendarHeader from './components/CalendarHeader'
@@ -8,6 +9,20 @@ import MobileRitualList from './components/MobileRitualList'
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [today, setToday] = useState(null)
+  const [calendar, setCalendar] = useState(null)
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode')
+    if (saved !== null) return saved === 'true'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode)
+    localStorage.setItem('darkMode', darkMode)
+  }, [darkMode])
 
   useEffect(() => {
     document.body.style.opacity = '0'
@@ -18,19 +33,56 @@ function App() {
     return () => clearTimeout(timer)
   }, [])
 
+  useEffect(() => {
+    fetchToday().then(setToday).catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    fetchCalendar(currentMonth + 1, currentYear).then(setCalendar).catch(console.error)
+  }, [currentMonth, currentYear])
+
+  const goPrevMonth = () => {
+    setCurrentMonth(m => m === 0 ? 11 : m - 1)
+    if (currentMonth === 0) setCurrentYear(y => y - 1)
+  }
+
+  const goNextMonth = () => {
+    setCurrentMonth(m => m === 11 ? 0 : m + 1)
+    if (currentMonth === 11) setCurrentYear(y => y + 1)
+  }
+
+  const goToday = () => {
+    const now = new Date()
+    setCurrentMonth(now.getMonth())
+    setCurrentYear(now.getFullYear())
+  }
+
+  const goYear = (y) => setCurrentYear(y)
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen text-on-background overflow-x-hidden">
       <MobileTopBar onToggleMenu={() => setSidebarOpen(v => !v)} />
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} today={today} darkMode={darkMode} onToggleDarkMode={() => setDarkMode(v => !v)} />
       <main
         className={`flex-grow bg-surface-container-lowest transition-all duration-500 ${
           sidebarOpen ? 'md:ml-sidebar-width' : 'md:ml-0'
         }`}
       >
-        <CalendarHeader onToggleSidebar={() => setSidebarOpen(v => !v)} sidebarOpen={sidebarOpen} />
-        <CalendarGrid />
-        <MobileRitualList />
-        <BentoCards />
+        <CalendarHeader
+          onToggleSidebar={() => setSidebarOpen(v => !v)}
+          sidebarOpen={sidebarOpen}
+          month={currentMonth}
+          year={currentYear}
+          onPrevMonth={goPrevMonth}
+          onNextMonth={goNextMonth}
+          onToday={goToday}
+          onYearChange={goYear}
+          darkMode={darkMode}
+          onToggleDarkMode={() => setDarkMode(v => !v)}
+        />
+        <CalendarGrid calendar={calendar} />
+        <MobileRitualList today={today} />
+        <BentoCards today={today} />
       </main>
     </div>
   )
