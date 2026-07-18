@@ -1,4 +1,22 @@
-function Sidebar({ open, onClose }) {
+const colorMap = {
+  secondary: "#a43a3d",
+  tertiary: "#735c00",
+  "tertiary-fixed-dim": "#e7c353"
+}
+
+function Sidebar({ open, onClose, today }) {
+  const dayName = today?.dayName ?? "Wednesday"
+  const monthShort = today?.monthShort ?? "Oct"
+  const day = today?.day ?? "23"
+  const wuku = today?.wuku ?? "Sinta"
+  const rituals = today?.upcomingRituals ?? []
+
+  const ritualData = [
+    { name: "Galungan", color: "secondary", label: rituals[0]?.daysAway ? `In ${rituals[0].daysAway} Days` : "" },
+    { name: "Kuningan", color: "tertiary", label: rituals[1]?.daysAway ? `In ${rituals[1].daysAway} Days` : "" },
+    { name: "Purnama", color: "tertiary-fixed-dim", label: rituals[2]?.daysAway ? `In ${rituals[2].daysAway} Days` : "" }
+  ]
+
   return (
     <>
       <div
@@ -23,8 +41,8 @@ function Sidebar({ open, onClose }) {
                 />
               </div>
               <h2 className="font-date-display text-[24px] text-primary tracking-tight leading-tight text-center">Kalabali</h2>
-              <p className="font-caption text-caption text-primary/60 uppercase tracking-widest mt-2 text-center">Wednesday, Oct 23</p>
-              <p className="font-caption text-caption text-primary/50 uppercase tracking-widest mt-0.5 text-center">Wuku Sinta</p>
+              <p className="font-caption text-caption text-primary/60 uppercase tracking-widest mt-2 text-center">{dayName}, {monthShort} {day}</p>
+              <p className="font-caption text-caption text-primary/50 uppercase tracking-widest mt-0.5 text-center">{wuku}</p>
             </div>
             <button onClick={onClose} className="md:hidden p-1.5 rounded-full hover:bg-primary/10 transition-colors flex-shrink-0">
               <span className="material-symbols-outlined text-primary">close</span>
@@ -36,46 +54,34 @@ function Sidebar({ open, onClose }) {
           <div className="space-y-1">
             <a className="text-secondary font-bold flex items-center gap-4 px-6 py-3 bg-surface-bright/50 rounded-xl transition-all scale-[0.98]" href="#">
               <span className="material-symbols-outlined">calendar_month</span>
-              <span className="font-label-bold">Monthly Schedule</span>
+              <span className="font-label-bold">Jadwal Bulanan</span>
             </a>
             <a className="text-on-surface-variant flex items-center gap-4 px-6 py-3 hover:bg-surface-bright/50 transition-colors rounded-xl" href="#">
               <span className="material-symbols-outlined">temple_hindu</span>
-              <span className="font-label-bold">Holy Rituals</span>
+              <span className="font-label-bold">Upacara Suci</span>
             </a>
           </div>
         </nav>
 
         <div className="flex flex-col flex-1 px-6 mt-10">
           <div>
-            <h3 className="px-2 font-header-sm text-header-sm text-primary uppercase tracking-widest mb-4">Upcoming Rituals</h3>
+            <h3 className="px-2 font-header-sm text-header-sm text-primary uppercase tracking-widest mb-4">Upacara Mendatang</h3>
             <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl">
-                <div className="w-2 h-8 bg-secondary rounded-full" />
-                <div>
-                  <p className="font-label-bold text-on-surface">Galungan</p>
-                  <p className="font-caption text-on-surface-variant">In 4 Days</p>
+              {ritualData.map((r, i) => r.label ? (
+                <div key={i} className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl">
+                  <div className="w-2 h-8 rounded-full" style={{ backgroundColor: colorMap[r.color] }} />
+                  <div>
+                    <p className="font-label-bold text-on-surface">{r.name}</p>
+                    <p className="font-caption text-on-surface-variant">{r.label}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl">
-                <div className="w-2 h-8 bg-tertiary rounded-full" />
-                <div>
-                  <p className="font-label-bold text-on-surface">Kuningan</p>
-                  <p className="font-caption text-on-surface-variant">In 14 Days</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white/40 rounded-2xl">
-                <div className="w-2 h-8 bg-tertiary-fixed-dim rounded-full" />
-                <div>
-                  <p className="font-label-bold text-on-surface">Purnama</p>
-                  <p className="font-caption text-on-surface-variant">Next Full Moon</p>
-                </div>
-              </div>
+              ) : null)}
             </div>
           </div>
           <div className="mt-auto pb-4 pt-8">
             <button className="w-full bg-tertiary-container text-on-tertiary-container py-3 rounded-full font-label-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
               <span className="material-symbols-outlined text-[20px]">add</span>
-              <span>Plan Ceremony</span>
+              <span>Rencanakan Upacara</span>
             </button>
           </div>
         </div>

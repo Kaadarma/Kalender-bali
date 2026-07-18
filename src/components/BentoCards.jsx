@@ -1,13 +1,13 @@
-export default function BentoCards() {
+export default function BentoCards({ today }) {
+  const reflection = today?.reflection ?? ""
+  const wuku = today?.wuku ?? ""
+
   return (
     <section className="px-margin-mobile md:px-margin-desktop py-gutter grid grid-cols-1 md:grid-cols-3 gap-gutter">
       <div className="md:col-span-2 bg-surface-container-low p-8 rounded-[32px] natural-shadow flex flex-col justify-between overflow-hidden relative group">
         <div className="relative z-10">
           <h4 className="font-date-display text-[24px] text-primary mb-2">Today's Reflection</h4>
-          <p className="font-body-main text-on-surface-variant max-w-md">
-            Wuku Sinta is the first week of the Pawukon cycle. Focus on new beginnings and internal cleansing.
-            It's an auspicious day for meditation and setting intentions for the upcoming ritual cycle.
-          </p>
+          <p className="font-body-main text-on-surface-variant max-w-md">{reflection}</p>
         </div>
         <div className="mt-8 flex gap-4 relative z-10">
           <button className="px-6 py-3 bg-primary text-white rounded-full font-label-bold hover:scale-105 transition-transform">
